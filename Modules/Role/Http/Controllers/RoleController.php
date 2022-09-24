@@ -48,7 +48,6 @@ class RoleController extends Controller
         try {
             $roles = new Role();
             $roles->name = $request->name;
-            $roles->guard_name = "web";
             $roles->save();
 
             return Json::response($roles);

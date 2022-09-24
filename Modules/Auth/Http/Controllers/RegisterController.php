@@ -2,9 +2,12 @@
 
 namespace Modules\Auth\Http\Controllers;
 
+use Brryfrmnn\Transformers\Json;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use Modules\User\Entities\User;
 
 class RegisterController extends Controller
 {
@@ -19,12 +22,14 @@ class RegisterController extends Controller
         try {
             $user = new User();
             $user->name = $request->name;
+            $user->phone = $request->phone;
             $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->no_telp = $request->no_telp;
             $user->username = $request->username;
+            $user->password = Hash::make($request->password);
+            $user->about = $request->about;
+            $user->address = $request->address;
+            $user->role_id = $request->role_id; 
             $user->save();
-            $user->assignRole($request->roleId);
 
             return Json::response($user);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

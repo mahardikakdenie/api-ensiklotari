@@ -34,10 +34,10 @@ class LoginController extends Controller
         try {
             $user = User::where('email', $request->email)
                         ->orWhere('username', $request->email)
-                        ->orWhere('no_telp', $request->email)
+                        ->orWhere('phone', $request->email)
                         ->first();
 
-            if (!$user || Hash::check($request->password, $user->password)) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
                 return Json::exception("Email atau Password Anda Salah");
             }
 

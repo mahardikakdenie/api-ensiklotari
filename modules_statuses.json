@@ -1,5 +1,7 @@
 {
     "User": true,
     "Auth": true,
-    "Role": true
+    "Role": true,
+    "Studio": true,
+    "Purchasing": true
 }

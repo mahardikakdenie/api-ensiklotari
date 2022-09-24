@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Role\Entities\Role;
 
 class User extends Model
 {
@@ -45,4 +46,28 @@ class User extends Model
     {
         return \Modules\User\Database\factories\UserFactory::new();
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    //  === Scope === //
+
+    public function scopeEntities($query, $entities)
+    {
+        if ($entities != null || $entities != '') {
+            $entities = str_replace(' ', '', $entities);
+            $entities = explode(',', $entities);
+
+            try {
+                return $query = $query->with($entities);
+            } catch (\Throwable $th) {
+                return Json::exception(null, validator()->errors());
+            }
+        }
+    }
+
+
+
 }

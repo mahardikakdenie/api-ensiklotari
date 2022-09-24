@@ -1,0 +1,11 @@
+{
+    "name": "Studio",
+    "alias": "studio",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Studio\\Providers\\StudioServiceProvider"
+    ],
+    "files": []
+}
