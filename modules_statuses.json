@@ -3,5 +3,6 @@
     "Auth": true,
     "Role": true,
     "Studio": true,
-    "Purchasing": true
+    "Purchasing": true,
+    "Room": true
 }

@@ -1,12 +1,11 @@
 <?php
 
-namespace Modules\Studio\Entities;
+namespace Modules\Room\Entities;
 
-use App\Http\Helpers\MethodsHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class studio extends Model
+class Live extends Model
 {
     use HasFactory;
 
@@ -14,9 +13,14 @@ class studio extends Model
     
     protected static function newFactory()
     {
-        return \Modules\Studio\Database\factories\StudioFactory::new();
+        return \Modules\Room\Database\factories\LiveFactory::new();
     }
 
+    //  === relations === //
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'live_key');
+    }
 
     //  === Scope === //
 

@@ -19,7 +19,9 @@ class UserController extends Controller
     {
         try {
             $user = User::entities($request->entities)
-            ->paginate($request->input("pagination", 10));
+                ->order($request->order)
+                ->dataLimit($request->limit)
+                ->get();
             return Json::response($user);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');

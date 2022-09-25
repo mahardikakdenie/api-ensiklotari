@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Role\Entities\Role;
+use \App\Http\Helpers\MethodsHelpers;
 
 class User extends Model
 {
@@ -56,16 +57,17 @@ class User extends Model
 
     public function scopeEntities($query, $entities)
     {
-        if ($entities != null || $entities != '') {
-            $entities = str_replace(' ', '', $entities);
-            $entities = explode(',', $entities);
+        MethodsHelpers::entities($query, $entities);
+    }
 
-            try {
-                return $query = $query->with($entities);
-            } catch (\Throwable $th) {
-                return Json::exception(null, validator()->errors());
-            }
-        }
+    public function scopeOrder($query, $order)
+    {
+        MethodsHelpers::order($query, $order);
+    }
+
+    public function scopeDataLimit($query, $limit)
+    {
+        MethodsHelpers::limit($query, $limit);
     }
 
 
