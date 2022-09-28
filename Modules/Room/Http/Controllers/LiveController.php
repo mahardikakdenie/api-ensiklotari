@@ -2,6 +2,7 @@
 
 namespace Modules\Room\Http\Controllers;
 
+use Brryfrmnn\Transformers\Json;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -17,9 +18,18 @@ class LiveController extends Controller
     {
         try {
             $data = Live::entities($request->entities)
+            ->order($request->order)
+            ->dataLimit($request->limit)
+            ->search($request->q, $request->role)
             ->get();
-        } catch (\Throwable $th) {
-            //throw $th;
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
     }
 
@@ -39,7 +49,22 @@ class LiveController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = new Live();
+            $data->name = $request->name;
+            $data->description = $request->description;
+            $data->about = $request->about;
+            $data->studio_id = $request->studio_id;
+            $data->save();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -47,9 +72,25 @@ class LiveController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        return view('room::show');
+        try {
+            $data = Live::findOrFail($id);
+            
+            $data->name = $request->input("name", $data->name);
+            $data->description = $request->input("description", $data->description);
+            $data->about = $request->input("about", $data->about);
+            $data->studio_id = $request->input("studio_id", $data->studio_id);
+            $data->save();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -70,7 +111,25 @@ class LiveController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $data = Live::findOrFail($id);
+            $data->name = $request->input("name", $data->name);
+            $data->description = $request->input('description', $data->description);
+            $data->about = $request->input('about', $data->about);
+            $data->studio_id = $request->input("studio_id", $data->studio_id);
+            // if -> !$request->studio_id ? $request->studio : $data->studio;
+            // $request->input() /// 
+            $data->save();
+
+            return Json::response($data);
+       
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -80,6 +139,15 @@ class LiveController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $data = Live::findOrFail($id);
+            $data->delete();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 }

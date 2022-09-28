@@ -33,4 +33,15 @@ class MethodsHelpers
 
         return $query;
     }
+
+    public static function search($query, $q, $role)
+    {
+        if ($q) {
+            $query->where("name", $q);
+        }
+
+        return $query;
+    }
+
+    // DRY -> dont repeat yourself // 
 }

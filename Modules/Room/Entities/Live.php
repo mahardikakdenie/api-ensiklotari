@@ -2,6 +2,7 @@
 
 namespace Modules\Room\Entities;
 
+use App\Http\Helpers\MethodsHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -19,7 +20,7 @@ class Live extends Model
     //  === relations === //
     public function schedules()
     {
-        return $this->hasMany(Schedule::class, 'live_key');
+        return $this->hasMany(Schedule::class, 'live_id');
     }
 
     //  === Scope === //
@@ -37,5 +38,12 @@ class Live extends Model
     public function scopeDataLimit($query, $limit)
     {
         MethodsHelpers::limit($query, $limit);
+    }
+
+    //  how to register object function -> keyword scope 
+    // test case 
+    public function scopeSearch($query, $q, $role) // naming lowerCase // 
+    {
+        MethodsHelpers::search($query, $q, $role);
     }
 }
