@@ -150,4 +150,28 @@ class LiveController extends Controller
             return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
     }
+
+
+    /**
+     * Remove the specified resources from storage.
+     * @param int $id
+     * @return Renderable
+     */
+    public function destroys($id)
+    {
+        try {
+            if (!is_array($id)) {
+                Json::exception("data tidak valid");
+            }
+            
+            $data = Live::whereIn($id);
+            $data->delete();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
+    }
 }
