@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\HomePage\Http\Controllers\HomePageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,11 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/homepage', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix("home-page")->middleware(['auth:sanctum'])->group(function() {
+    Route::prefix("banner")->group(function() {
+        Route::get("", [HomePageController::class, 'getManageBanner']);
+        Route::post("", [HomePageController::class, 'setManageBanner']);
+    });
 });

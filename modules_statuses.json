@@ -4,5 +4,9 @@
     "Role": true,
     "Studio": true,
     "Purchasing": true,
-    "Room": true
+    "Room": true,
+    "Category": true,
+    "Gallery": true,
+    "Media": true,
+    "Dashboard": true
 }
