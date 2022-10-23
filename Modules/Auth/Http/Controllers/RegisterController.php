@@ -2,9 +2,14 @@
 
 namespace Modules\Auth\Http\Controllers;
 
+use Brryfrmnn\Transformers\Json;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Modules\Studio\Entities\Studio;
+use Modules\User\Entities\User;
 
 class RegisterController extends Controller
 {
@@ -19,12 +24,14 @@ class RegisterController extends Controller
         try {
             $user = new User();
             $user->name = $request->name;
+            $user->phone = $request->phone;
             $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->no_telp = $request->no_telp;
             $user->username = $request->username;
+            $user->password = Hash::make($request->password);
+            $user->about = $request->about;
+            $user->address = $request->address;
+            $user->role_id = $request->role_id; 
             $user->save();
-            $user->assignRole($request->roleId);
 
             return Json::response($user);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -39,9 +46,34 @@ class RegisterController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function registerStudio(Request $request)
     {
-        return view('auth::index');
+        try {
+            DB::beginTransaction();
+            $user = new User();
+            $user->name= $request->name;
+            $user->phone = $request->phone;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->password = Hash::make($request->password);
+            $user->about = $request->about;
+            $user->address = $request->address;
+            $user->role_id = $request->role_id; 
+            $user->save();
+
+            // $studio = new Studio();
+            // $studio->name = $request->name;
+            // $studio->slug =     
+            // $studio->save();
+
+            return Json::response($studio);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Exceptions ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**

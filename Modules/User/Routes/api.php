@@ -18,3 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix("user")->middleware(["auth:sanctum"])->group(function() {
+    Route::get('', [UserController::class, 'index']);
+    Route::post('', [UserController::class, 'store'])->middleware('role:1');
+    Route::get('{id}', [UserController::class, 'show']);
+    Route::put('{id}', [UserController::class, 'update'])->middleware('role:1');
+});
+

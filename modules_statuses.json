@@ -1,5 +1,12 @@
 {
     "User": true,
     "Auth": true,
-    "Role": true
+    "Role": true,
+    "Studio": true,
+    "Purchasing": true,
+    "Room": true,
+    "Category": true,
+    "Gallery": true,
+    "Media": true,
+    "Dashboard": true
 }
