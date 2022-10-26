@@ -17,7 +17,10 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         try {
-            $category = Category::get();
+            $category = Category::entities($request->entities)
+                ->order($request->order)
+                ->dataLimit($request->limit)
+                ->get();
 
             return Json::response($category);
         }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -47,9 +50,17 @@ class CategoryController extends Controller
     {
         try {
             $data = new Category();
-            $data->
-        } catch (\Throwable $th) {
-            //throw $th;
+            $data->name = $request->name;
+            $data->description = $request->description;
+            $data->save();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
     }
 
@@ -58,9 +69,20 @@ class CategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return view('category::show');
+        try {
+            $data = Category::entities($request->entities)
+                ->findOrFail($id);
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -81,7 +103,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $data = Category::findOrFail($id);
+            $data->name = $request->input("name", $data->name);
+            $data->description = $request->input("description", $data->description);
+            $data->save();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -91,6 +126,24 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $data;
+            if (is_array($id)) {
+                $data = Category::whereIn("id", $id);
+                $data->delete();
+            }
+            if (!is_array($id)) {
+                $data = Category::where("id", $id);
+                $data->delete();
+            }
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 }
