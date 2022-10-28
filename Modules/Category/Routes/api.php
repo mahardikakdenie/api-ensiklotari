@@ -21,7 +21,8 @@ Route::middleware('auth:api')->get('/category', function (Request $request) {
 Route::prefix("category")->group(function() {
     Route::get('', [CategoryController::class, 'index']);
     Route::post('', [CategoryController::class, 'store'])->middleware(['auth:sanctum', 'role:1']);
+    Route::put("/restore/{id}", [CategoryController::class, 'restore'])->middleware(['auth:sanctum', 'role:1']);
     Route::get("{id}", [CategoryController::class, 'show']);
     Route::put("{id}", [CategoryController::class, 'update'])->middleware(['auth:sanctum', 'role:1']);
-    Route::delete("{id}", [CategoryController::class, 'delete'])->middleware(['auth:sanctum', 'role:1']);
+    Route::delete("{id}", [CategoryController::class, 'destroy'])->middleware(['auth:sanctum', 'role:1']);
 });

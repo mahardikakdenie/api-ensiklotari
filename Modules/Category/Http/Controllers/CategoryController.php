@@ -19,6 +19,7 @@ class CategoryController extends Controller
         try {
             $category = Category::entities($request->entities)
                 ->order($request->order)
+                ->trash($request->trash)
                 ->dataLimit($request->limit)
                 ->get();
 
@@ -127,16 +128,8 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
-            $data;
-            if (is_array($id)) {
-                $data = Category::whereIn("id", $id);
-                $data->delete();
-            }
-            if (!is_array($id)) {
-                $data = Category::where("id", $id);
-                $data->delete();
-            }
-
+            $data = Category::findOrFail($id);
+            $data->delete();
             return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
@@ -146,4 +139,27 @@ class CategoryController extends Controller
             return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
     }
+
+    /**
+     * Restore the specified resource form
+     * @param int $id
+     * @return Renderable
+     */
+
+     public function restore($id)
+     {
+        try {
+            
+            $data = Category::trash(1)->findOrFail($id);
+            $data->restore();
+            
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
+     }
 }

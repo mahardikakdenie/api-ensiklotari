@@ -5,10 +5,11 @@ namespace Modules\Category\Entities;
 use App\Http\Helpers\MethodsHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [];
     
@@ -32,5 +33,10 @@ class Category extends Model
      public function scopeDataLimit($query, $limit)
      {
         MethodsHelpers::limit($query, $limit);
+     }
+
+     public function scopeTrash($query, $is_trash)
+     {
+        MethodsHelpers::trashData($query, $is_trash);
      }
 }

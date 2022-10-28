@@ -43,5 +43,14 @@ class MethodsHelpers
         return $query;
     }
 
+    public static function trashData($query, $is_trash)
+    {
+        if ($is_trash) {
+            $query->onlyTrashed();
+        }
+
+        return $query;
+    }
+
     // DRY -> dont repeat yourself // 
 }
