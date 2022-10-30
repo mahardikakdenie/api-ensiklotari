@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Media\Http\Controllers\MediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,8 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/media', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix("media")->group(function () {
+    Route::post('', [MediaController::class, 'store']);
 });

@@ -42,7 +42,14 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $media = new Media();
+            $path = $request->media->store("images");
+            dd($path);
+            // $media->url = 
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**
