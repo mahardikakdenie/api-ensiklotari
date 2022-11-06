@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Modules\User\Http\Controllers\UserController;
+use Modules\User\Http\Controllers\UserSummaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix("user")->middleware(["auth:sanctum"])->group(function() {
     Route::get('', [UserController::class, 'index']);
     Route::post('', [UserController::class, 'store'])->middleware('role:1');
+    Route::prefix('summary')->group(function() {
+        Route::get('', [UserSummaryController::class, 'index']);
+    });
     Route::get('{id}', [UserController::class, 'show']);
     Route::put('{id}', [UserController::class, 'update'])->middleware('role:1');
 });
