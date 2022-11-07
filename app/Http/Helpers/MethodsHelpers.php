@@ -1,11 +1,13 @@
 <?php
+
 namespace App\Http\Helpers;
-class MethodsHelpers 
+
+class MethodsHelpers
 {
     public static function order($query, $order)
     {
         if ($order === '-id') {
-            $query->orderBy('id',"desc");
+            $query->orderBy('id', "desc");
         }
 
         return $query;
@@ -27,7 +29,7 @@ class MethodsHelpers
 
     public static function limit($query, $limit)
     {
-        if($limit) {
+        if ($limit) {
             $query->limit($limit);
         }
 

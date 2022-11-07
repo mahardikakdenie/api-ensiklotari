@@ -24,7 +24,7 @@ class CategoryController extends Controller
                 ->get();
 
             return Json::response($category);
-        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
             return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
@@ -146,13 +146,13 @@ class CategoryController extends Controller
      * @return Renderable
      */
 
-     public function restore($id)
-     {
+    public function restore($id)
+    {
         try {
-            
+
             $data = Category::trash(1)->findOrFail($id);
             $data->restore();
-            
+
             return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
@@ -161,5 +161,5 @@ class CategoryController extends Controller
         } catch (\ErrorException $e) {
             return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
-     }
+    }
 }

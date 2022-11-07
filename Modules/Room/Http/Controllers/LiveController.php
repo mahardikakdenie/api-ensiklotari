@@ -18,10 +18,10 @@ class LiveController extends Controller
     {
         try {
             $data = Live::entities($request->entities)
-            ->order($request->order)
-            ->dataLimit($request->limit)
-            ->search($request->q, $request->role)
-            ->get();
+                ->order($request->order)
+                ->dataLimit($request->limit)
+                ->search($request->q, $request->role)
+                ->get();
 
             return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -72,11 +72,11 @@ class LiveController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show(Request $request,$id)
+    public function show(Request $request, $id)
     {
         try {
             $data = Live::findOrFail($id);
-            
+
             $data->name = $request->input("name", $data->name);
             $data->description = $request->input("description", $data->description);
             $data->about = $request->input("about", $data->about);
@@ -122,7 +122,6 @@ class LiveController extends Controller
             $data->save();
 
             return Json::response($data);
-       
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -163,7 +162,7 @@ class LiveController extends Controller
             if (!is_array($id)) {
                 Json::exception("data tidak valid");
             }
-            
+
             $data = Live::whereIn($id);
             $data->delete();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

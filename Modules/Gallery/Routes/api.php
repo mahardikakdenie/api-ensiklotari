@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Gallery\Http\Controllers\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,11 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/gallery', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix("gallery")->group(function () {
+    Route::get('', [GalleryController::class, 'index']);
+    Route::post('', [GalleryController::class, 'store']);
+    Route::get("{id}", [GalleryController::class, 'show']);
+    Route::delete("{id}", [GalleryController::class, 'destroy']);
 });
