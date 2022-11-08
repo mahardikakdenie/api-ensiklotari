@@ -12,7 +12,7 @@ class Live extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [];
-    
+
     protected static function newFactory()
     {
         return \Modules\Room\Database\factories\LiveFactory::new();

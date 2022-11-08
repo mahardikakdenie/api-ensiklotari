@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/category', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix("category")->group(function() {
+Route::prefix("category")->group(function () {
     Route::get('', [CategoryController::class, 'index']);
     Route::post('', [CategoryController::class, 'store'])->middleware(['auth:sanctum', 'role:1']);
     Route::put("/restore/{id}", [CategoryController::class, 'restore'])->middleware(['auth:sanctum', 'role:1']);
