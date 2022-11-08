@@ -19,10 +19,12 @@ class UserSummaryController extends Controller
         try {
             $data = [
                 "all" => 0,
+                "active" => 0,
                 "non_active" => 0,
             ];
 
             $data['all'] = User::count();
+            $data['active'] = User::where('is_active', true)->count();
             $data['non_active'] = User::where('is_active', false)->count();
 
             return Json::response($data);
