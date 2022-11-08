@@ -5,6 +5,7 @@ namespace Modules\Gallery\Entities;
 use App\Http\Helpers\MethodsHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Media\Entities\Media;
 
 class Gallery extends Model
 {
@@ -17,6 +18,11 @@ class Gallery extends Model
     protected static function newFactory()
     {
         return \Modules\Gallery\Database\factories\GalleryFactory::new();
+    }
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class, 'media_id');
     }
 
     //  === Scope === //
