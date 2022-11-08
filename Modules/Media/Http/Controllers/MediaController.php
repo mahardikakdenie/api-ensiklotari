@@ -42,7 +42,22 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // try {
+            $media = new Media();
+            $path = $request->media->store("images");
+            $media->url = $path;
+            $media->module = $request->module;
+            $media->save();
+
+            return Json::response($media);
+            // $media->url = 
+        // } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        //     return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // } catch (\ErrorException $e) {
+        //     return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // }
     }
 
     /**

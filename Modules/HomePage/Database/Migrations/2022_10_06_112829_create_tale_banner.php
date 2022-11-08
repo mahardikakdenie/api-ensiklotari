@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("media_id");
             $table->foreign("media_id")->references("id")->on("medias");
+            // 
             $table->timestamps();
         });
     }

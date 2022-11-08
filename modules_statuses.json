@@ -8,5 +8,6 @@
     "Category": true,
     "Gallery": true,
     "Media": true,
-    "Dashboard": true
+    "Dashboard": true,
+    "Instructor": true
 }

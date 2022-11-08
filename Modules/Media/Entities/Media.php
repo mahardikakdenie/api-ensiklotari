@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Media extends Model
 {
     use HasFactory;
+    protected $table = "medias";
 
     protected $fillable = [];
     
