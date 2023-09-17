@@ -9,5 +9,13 @@
     "Gallery": true,
     "Media": true,
     "Dashboard": true,
-    "Instructor": true
+    "Instructor": true,
+    "Tutorial": true,
+    "Model": true,
+    "TutorialContents": true,
+    "Sertificate": true,
+    "Certificate": true,
+    "Paymemnt": true,
+    "Payment": true,
+    "Credit": true
 }

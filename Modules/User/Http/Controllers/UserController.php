@@ -7,6 +7,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
+use Modules\Role\Entities\Permission;
+use Modules\Role\Entities\Role;
 use Modules\User\Entities\User;
 
 class UserController extends Controller
@@ -19,6 +21,7 @@ class UserController extends Controller
     {
         try {
             $user = User::entities($request->entities)
+                ->summary($request->summary)
                 ->order($request->order)
                 ->dataLimit($request->limit)
                 ->get();
@@ -30,16 +33,26 @@ class UserController extends Controller
         } catch (\ErrorException $e) {
             return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
-
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show Me User.
      * @return Renderable
      */
-    public function create()
+    public function me(Request $request)
     {
-        return view('user::create');
+        try {
+            $me = User::entities($request->entities)
+                ->findOrFail($request->user()->id);
+
+            return Json::response($me);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -58,7 +71,10 @@ class UserController extends Controller
             $data->password = Hash::make($request->password);
             $data->about = $request->about;
             $data->address = $request->address;
+            $data->is_active = false;
             $data->role_id = $request->role_id;
+            $data->certificate_id = $request->certificate_id;
+            $data->media_id = $request->media_id;
             $data->save();
             return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -79,9 +95,9 @@ class UserController extends Controller
     {
         try {
             $data = User::entities($request->entities)
-             ->findOrFail($id);
+                ->findOrFail($id);
 
-             return Json::response($data);
+            return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -110,6 +126,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try {
+
             $data = User::findOrFail($id);
             $data->name = $request->input('name', $data->name);
             $data->email = $request->input('email', $data->email);
@@ -118,7 +135,11 @@ class UserController extends Controller
             $data->about = $request->input('about', $data->about);
             $data->address = $request->input('address', $data->address);
             $data->role_id = $request->input('role_id', $data->role_id);
+            $data->is_active = $request->input('is_active', $data->is_active);
+            $data->media_id = $request->input("media_id", $data->media_id);
+            $data->certificate_id = $request->input("certificate_id", $data->certificate_id);
             $data->save();
+
             return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
@@ -134,8 +155,20 @@ class UserController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function accessControlList(Request $request)
     {
-        //
+        try {
+            $user_id = $request->user()->id;
+            $role = Role::entities($request->entities)
+                ->whereWithEntities('users', $user_id, 'id')
+                ->first();
+            return Json::response($role);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 }

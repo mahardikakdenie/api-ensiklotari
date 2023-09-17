@@ -10,23 +10,23 @@ use Modules\Dashboard\Entities\Banner;
 
 class BannerController extends Controller
 {
-      /**
+    /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index(Request $request)
     {
-        try {
-            $banner = Banner::get();
+        // try {
+        $banner = Banner::first();
 
-            return Json::response($banner);
-        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
-        } catch (\ErrorException $e) {
-            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
-        }
+        return Json::response($banner);
+        // }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        //     return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // } catch (\ErrorException $e) {
+        //     return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // }
     }
 
     /**
@@ -39,9 +39,9 @@ class BannerController extends Controller
             $banner = new Banner();
             $banner->media_id = $request->media_id;
             $banner->save();
-            
+
             return Json::response($banner);
-        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
             return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');

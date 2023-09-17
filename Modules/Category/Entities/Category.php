@@ -3,6 +3,7 @@
 namespace Modules\Category\Entities;
 
 use App\Http\Helpers\MethodsHelpers;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,5 +39,12 @@ class Category extends Model
     public function scopeTrash($query, $is_trash)
     {
         MethodsHelpers::trashData($query, $is_trash);
+    }
+
+    public function scopeSummary($query, $summary)
+    {
+        if ($summary === 'publish' || $summary === 'draft') return $query->where('status', $summary);
+        if ($summary === 'new') return $query->whereDate('created_at', '=', Carbon::today()->toDateString());
+        else return $query;
     }
 }

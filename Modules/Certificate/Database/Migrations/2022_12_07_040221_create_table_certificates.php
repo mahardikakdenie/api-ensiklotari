@@ -13,10 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('certificates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("live_id")->constrained();
-            $table->foreignId("option_id")->constrained();
+            $table->string("name");
+            $table->text("description");
+            $table->string("status");
+            $table->string("module");
+            $table->unsignedBigInteger("media_id")->nullable();
+            $table->foreign('media_id')->references("id")->on("medias");
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('certificates');
     }
 };

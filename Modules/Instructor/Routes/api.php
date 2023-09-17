@@ -18,6 +18,11 @@ Route::middleware('auth:api')->get('/instructor', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix("instructor")->group(function() {
+Route::prefix("instructor")->middleware(['auth:sanctum'])->group(function () {
     Route::get('', [InstructorController::class, 'index']);
+    Route::post('', [InstructorController::class, 'store']);
+    Route::get("{id}", [InstructorController::class, 'show']);
+    Route::put('{id}', [InstructorController::class, 'update']);
+    Route::delete('{id}', [InstructorController::class, 'destroy']);
+    Route::get('{slug}/slug', [InstructorController::class, 'showBySlug']);
 });

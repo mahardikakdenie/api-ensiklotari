@@ -32,6 +32,11 @@ class RoleSeederTableSeeder extends Seeder
         $role->name = "owner";
         $role->save();
 
+        // Make instructor
+        $role = new Role();
+        $role->name = "instructor";
+        $role->save();
+
 
         // $this->call("OthersTableSeeder");
     }

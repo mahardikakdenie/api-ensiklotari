@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Studio\Http\Controllers\StudioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,10 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/studio', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('studio')->group(function () {
+    Route::get('', [StudioController::class, 'index']);
+    Route::post('', [StudioController::class, 'store'])->middleware(['auth:sanctum']);
+    Route::get('{slug}', [StudioController::class, 'showBySlug']);
 });

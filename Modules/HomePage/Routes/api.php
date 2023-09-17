@@ -18,9 +18,9 @@ Route::middleware('auth:api')->get('/homepage', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix("home-page")->middleware(['auth:sanctum'])->group(function() {
-    Route::prefix("banner")->group(function() {
-        Route::get("", [HomePageController::class, 'getManageBanner']);
+Route::prefix("home-page")->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix("banners")->group(function () {
+        Route::get("", [HomePageController::class, 'index']);
         Route::post("", [HomePageController::class, 'setManageBanner']);
     });
 });

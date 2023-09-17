@@ -3,6 +3,7 @@
 namespace Modules\Category\Http\Controllers;
 
 use Brryfrmnn\Transformers\Json;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -21,6 +22,7 @@ class CategoryController extends Controller
                 ->order($request->order)
                 ->trash($request->trash)
                 ->dataLimit($request->limit)
+                ->summary($request->summary)
                 ->get();
 
             return Json::response($category);
@@ -37,9 +39,29 @@ class CategoryController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function summary(Request $request)
     {
-        return view('category::create');
+        try {
+            $data = [
+                'all' => 0,
+                "publish" => 0,
+                "draft" => 0,
+                "new" => 0,
+            ];
+
+            $data["all"] = Category::count();
+            $data['publish'] = Category::where('status', 'publish')->count();
+            $data['draft'] = Category::where('status', 'draft')->count();
+            $data['new'] = Category::whereDate('created_at', '=', Carbon::today()->toDateString())->count();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -50,9 +72,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         try {
+            // 
             $data = new Category();
             $data->name = $request->name;
             $data->description = $request->description;
+            $data->status = $request->status;
             $data->save();
 
             return Json::response($data);
@@ -108,6 +132,7 @@ class CategoryController extends Controller
             $data = Category::findOrFail($id);
             $data->name = $request->input("name", $data->name);
             $data->description = $request->input("description", $data->description);
+            $data->status = $request->input("status", $data->status);
             $data->save();
 
             return Json::response($data);

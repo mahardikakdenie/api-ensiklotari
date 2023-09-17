@@ -13,7 +13,7 @@ use Modules\User\Entities\User;
 
 class RegisterController extends Controller
 {
-    
+
     /**
      * Store a newly created resource in storage.
      * @param Request $request
@@ -21,26 +21,27 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->phone = $request->phone;
-            $user->email = $request->email;
-            $user->username = $request->username;
-            $user->password = Hash::make($request->password);
-            $user->about = $request->about;
-            $user->address = $request->address;
-            $user->role_id = $request->role_id; 
-            $user->save();
+        // try {
+        $user = new User();
+        $user->name = $request->name;
+        $user->phone = $request->phone;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->password = Hash::make($request->password);
+        $user->about = $request->about;
+        $user->address = $request->address;
+        $user->role_id = $request->role_id;
+        $user->save();
+        $user->role;
 
-            return Json::response($user);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return Json::exception('Error Exceptions ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
-        } catch (\ErrorException $e) {
-            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
-        }
+        return Json::response($user);
+        // } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        //     return Json::exception('Error Exceptions ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // } catch (\ErrorException $e) {
+        //     return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        // }
     }
     /**
      * Display a listing of the resource.
@@ -51,14 +52,14 @@ class RegisterController extends Controller
         try {
             DB::beginTransaction();
             $user = new User();
-            $user->name= $request->name;
+            $user->name = $request->name;
             $user->phone = $request->phone;
             $user->email = $request->email;
             $user->username = $request->username;
             $user->password = Hash::make($request->password);
             $user->about = $request->about;
             $user->address = $request->address;
-            $user->role_id = $request->role_id; 
+            $user->role_id = $request->role_id;
             $user->save();
 
             // $studio = new Studio();

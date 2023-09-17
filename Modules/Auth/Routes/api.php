@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Modules\Auth\Http\Controllers\AuthController;
 use Modules\Auth\Http\Controllers\LoginController;
 use Modules\Auth\Http\Controllers\RegisterController;
+use Modules\User\Http\Controllers\UserOwnerStudioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,10 @@ Route::middleware('auth:api')->get('/auth', function (Request $request) {
 });
 
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [RegisterController::class, 'register']);
+    Route::prefix('register')->group(function () {
+        Route::post('', [RegisterController::class, 'register']);
+        Route::post('/studio', [UserOwnerStudioController::class, 'store']);
+    });
     Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });

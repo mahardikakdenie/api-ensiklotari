@@ -17,10 +17,10 @@ class HomePageController extends Controller
     public function index(Request $request)
     {
         try {
-            $banner = Banner::get();
+            $banner = Banner::first();
 
             return Json::response($banner);
-        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
             return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
@@ -39,9 +39,9 @@ class HomePageController extends Controller
             $banner = new Banner();
             $banner->media_id = $request->media_id;
             $banner->save();
-            
+
             return Json::response($banner);
-        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
             return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');

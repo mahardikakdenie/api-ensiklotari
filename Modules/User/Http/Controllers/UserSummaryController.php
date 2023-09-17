@@ -3,6 +3,7 @@
 namespace Modules\User\Http\Controllers;
 
 use Brryfrmnn\Transformers\Json;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -21,14 +22,18 @@ class UserSummaryController extends Controller
                 "all" => 0,
                 "active" => 0,
                 "non_active" => 0,
+                "new" => 0,
             ];
 
             $data['all'] = User::count();
-            $data['active'] = User::where('is_active', true)->count();
-            $data['non_active'] = User::where('is_active', false)->count();
+            $data['active'] = User::where('is_active', true)
+                ->count();
+            $data['non_active'] = User::where('is_active', false)
+                ->orWhere('is_active', null)
+                ->count();
+            $data['new'] = User::whereDate('created_at', '=', Carbon::today()->toDateString())->count();
 
             return Json::response($data);
-
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {

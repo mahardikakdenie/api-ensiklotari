@@ -17,10 +17,18 @@ class StudioController extends Controller
     public function index(Request $request)
     {
         try {
-            $data = Studio::get();
+            $data = Studio::entities($request->entities)
+                ->order($request->order)
+                ->dataLimit($request->limit)
+                ->get();
+
             return Json::response($data);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         }
     }
 
@@ -34,13 +42,32 @@ class StudioController extends Controller
     }
 
     /**
+     * Create Studio By Administrator
      * Store a newly created resource in storage.
      * @param Request $request
      * @return Renderable
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = new Studio();
+            $data->name = $request->name;
+            $data->slug = Studio::generatedSlug($data->name);
+            $data->address = $request->address;
+            $data->about = $request->about;
+            $data->phone = $request->phone;
+            $data->owner_id = $request->user()->id;
+            $data->media_id = $request->media_id;
+            $data->save();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**
@@ -48,9 +75,40 @@ class StudioController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return view('studio::show');
+        try {
+            $data = Studio::entities($request->entities)
+                ->get();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
+    }
+
+    /**
+     * Show the specified resource.
+     * @param int $id
+     * @return Renderable
+     */
+    public function showBySlug($slug, Request $request)
+    {
+        try {
+            $data = Studio::entities($request->entities)
+                ->bySlug($slug)
+                ->first();
+
+            return Json::response($data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Json::exception('Error Query ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        } catch (\ErrorException $e) {
+            return Json::exception('Error Exception ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
+        }
     }
 
     /**

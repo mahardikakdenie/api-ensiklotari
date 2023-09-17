@@ -1,0 +1,11 @@
+{
+    "name": "Tutorial",
+    "alias": "tutorial",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Tutorial\\Providers\\TutorialServiceProvider"
+    ],
+    "files": []
+}

@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('tutorial_contents', function (Blueprint $table) {
             $table->id();
-            $table->time('time-start');
-            $table->string("duration");
-            $table->date("start_at");
+            $table->text('title');
+            $table->longText('content');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('options');
+        Schema::dropIfExists('tutorial_contents');
     }
 };
