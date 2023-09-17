@@ -22,7 +22,7 @@ use Modules\Room\Http\Controllers\VideoController;
 
 Route::prefix('front-end')->group(function () {
     Route::prefix('live')->group(function () {
-        Route::get('', [FrontLiveClassController::class, 'indexALl']);
+        Route::get('', [FrontLiveClassController::class, 'index']);
         Route::get('{id}', [FrontLiveClassController::class, 'show']);
     });
 });
