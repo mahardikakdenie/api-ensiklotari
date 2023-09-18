@@ -5,6 +5,7 @@ namespace Modules\Room\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Room\Entities\Live;
 
 class FrontLiveClassController extends Controller
 {
