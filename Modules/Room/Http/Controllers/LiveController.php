@@ -122,30 +122,33 @@ class LiveController extends Controller
         try {
             $user_id = $request->user()->id;
             $studio =  Studio::where('owner_id', $user_id)->first();
-            $data = new Live();
-            $data->name = $request->name;
-            $data->slug = Live::generatedSlug($request->name);
-            $data->description = $request->description;
-            $data->about = $request->about;
-            $data->studio_id = $studio->id;
-            $data->media_id = $request->media_id;
-            $data->status = $request->status;
-            $data->is_active = $request->is_active;
-            $data->category_id = $request->category_id;
-            $data->save();
+            if ($studio) {
+                $data = new Live();
+                $data->name = $request->name;
+                $data->slug = Live::generatedSlug($request->name);
+                $data->description = $request->description;
+                $data->about = $request->about;
+                $data->studio_id = $studio->id;
+                $data->media_id = $request->media_id;
+                $data->status = $request->status;
+                $data->is_active = $request->is_active;
+                $data->category_id = $request->category_id;
+                $data->save();
 
-            if (is_array($request->instructor_id)) {
-                foreach ($request->instructor_id as $key => $id) {
-                    $instructor = new InstructorHasClass();
-                    $instructor->live_class_id = $data->id;
-                    $instructor->instructor_id = $id;
-                    $instructor->save();
+                if (is_array($request->instructor_id)) {
+                    foreach ($request->instructor_id as $key => $id) {
+                        $instructor = new InstructorHasClass();
+                        $instructor->live_class_id = $data->id;
+                        $instructor->instructor_id = $id;
+                        $instructor->save();
+                    }
                 }
+
+                $data->instructor;
+                return Json::response($data);
+            } else {
+                return Json::exception("your account is not owner");
             }
-
-            $data->instructor;
-
-            return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return Json::exception('Error Model ' . $debug = env('APP_DEBUG', false) == true ? $e : '');
         } catch (\Illuminate\Database\QueryException $e) {
