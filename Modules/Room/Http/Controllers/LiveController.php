@@ -29,7 +29,7 @@ class LiveController extends Controller
                 ->order($request->order)
                 ->dataLimit($request->limit)
                 ->search($request->q, $request->role)
-                ->get();
+                ->paginate($request->input('paginate', 3));
 
             return Json::response($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
