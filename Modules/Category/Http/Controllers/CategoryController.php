@@ -77,6 +77,7 @@ class CategoryController extends Controller
             $data->name = $request->name;
             $data->description = $request->description;
             $data->status = $request->status;
+            $data->media_id = $request->input('media_id', 1);
             $data->save();
 
             return Json::response($data);
@@ -133,6 +134,7 @@ class CategoryController extends Controller
             $data->name = $request->input("name", $data->name);
             $data->description = $request->input("description", $data->description);
             $data->status = $request->input("status", $data->status);
+            $data->media_id = $request->input('media_id', 1);
             $data->save();
 
             return Json::response($data);

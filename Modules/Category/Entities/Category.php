@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Media\Entities\Media;
 
 class Category extends Model
 {
@@ -46,5 +47,10 @@ class Category extends Model
         if ($summary === 'publish' || $summary === 'draft') return $query->where('status', $summary);
         if ($summary === 'new') return $query->whereDate('created_at', '=', Carbon::today()->toDateString());
         else return $query;
+    }
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class, 'media_id');
     }
 }
