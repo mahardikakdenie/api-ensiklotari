@@ -17,5 +17,7 @@
     "Certificate": true,
     "Paymemnt": true,
     "Payment": true,
-    "Credit": true
+    "Credit": true,
+    "Analityc": true,
+    "Analytic": true
 }
